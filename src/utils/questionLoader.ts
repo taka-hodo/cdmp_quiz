@@ -1,8 +1,5 @@
 import type { Question } from '../types';
 
-interface QuestionData {
-  questions: Question[];
-}
 
 // .backup ファイル用のインターフェース
 interface BackupChoice {
@@ -44,7 +41,7 @@ export async function loadQuestions(language: 'en' | 'ja' = 'en', practiceSet?: 
       console.log('JSON parsing successful');
     } catch (parseError) {
       console.error('JSON parsing failed:', parseError);
-      throw new Error(`JSON parsing error: ${parseError.message}`);
+      throw new Error(`JSON parsing error: ${parseError instanceof Error ? parseError.message : String(parseError)}`);
     }
     
     if (!backupQuestions || backupQuestions.length === 0) {
@@ -65,7 +62,7 @@ export async function loadQuestions(language: 'en' | 'ja' = 'en', practiceSet?: 
         id: backupQ.number,
         text: backupQ.question,
         options: options,
-        correctIndex: backupQ.correct - 1, // 1-basedから0-basedに変換
+        correctIndex: (backupQ.correct - 1) as 0 | 1 | 2 | 3 | 4, // 1-basedから0-basedに変換
         explanations: explanations,
         domain: backupQ.domain
       };
@@ -96,8 +93,8 @@ export async function loadQuestions(language: 'en' | 'ja' = 'en', practiceSet?: 
   } catch (error) {
     console.error('Error loading questions:', error);
     console.error('Error details:', {
-      message: error.message,
-      stack: error.stack
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined
     });
     return [];
   }

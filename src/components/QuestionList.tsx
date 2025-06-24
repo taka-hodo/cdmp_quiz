@@ -45,7 +45,7 @@ const QuestionList: React.FC = () => {
 
   return (
     <div className="p-4">
-      {filteredQuestions.map((question, filteredIndex) => {
+      {filteredQuestions.map((question) => {
         const { isBookmarked, answerStatus } = getQuestionStatus(question.id);
         const isActive = questions[currentQuestionIndex]?.id === question.id;
         

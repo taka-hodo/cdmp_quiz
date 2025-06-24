@@ -11,7 +11,7 @@ const QuestionDebug: React.FC = () => {
       const text = await response.text();
       setResult(`Status: ${response.status}\nLength: ${text.length}\nFirst 500 chars:\n${text.substring(0, 500)}`);
     } catch (error) {
-      setResult(`Error: ${error.message}`);
+      setResult(`Error: ${error instanceof Error ? error.message : String(error)}`);
     }
   };
   
@@ -20,9 +20,10 @@ const QuestionDebug: React.FC = () => {
       const response = await fetch('/data/CDMP_questions.yaml');
       const text = await response.text();
       const yamlData = yaml.load(text);
-      setResult(`YAML Parse Success:\nType: ${typeof yamlData}\nKeys: ${Object.keys(yamlData || {})}\nQuestions: ${yamlData?.questions?.length || 0}\nFirst question: ${JSON.stringify(yamlData?.questions?.[0], null, 2)}`);
+      const data = yamlData as { questions?: unknown[] } | null;
+      setResult(`YAML Parse Success:\nType: ${typeof yamlData}\nKeys: ${Object.keys(yamlData || {})}\nQuestions: ${data?.questions?.length || 0}\nFirst question: ${JSON.stringify(data?.questions?.[0], null, 2)}`);
     } catch (error) {
-      setResult(`YAML Parse Error: ${error.message}\nStack: ${error.stack}`);
+      setResult(`YAML Parse Error: ${error instanceof Error ? error.message : String(error)}\nStack: ${error instanceof Error ? error.stack : 'Unknown'}`);
     }
   };
   
@@ -31,7 +32,7 @@ const QuestionDebug: React.FC = () => {
       const questions = await loadQuestions();
       setResult(`Full Load Success:\nLoaded questions: ${questions.length}\nFirst question: ${JSON.stringify(questions[0], null, 2)}`);
     } catch (error) {
-      setResult(`Full Load Error: ${error.message}\nStack: ${error.stack}`);
+      setResult(`Full Load Error: ${error instanceof Error ? error.message : String(error)}\nStack: ${error instanceof Error ? error.stack : 'Unknown'}`);
     }
   };
 

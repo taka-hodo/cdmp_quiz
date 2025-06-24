@@ -35,7 +35,7 @@ const TestExplanations: React.FC<TestExplanationsProps> = ({
   };
 
   const getFilteredQuestions = () => {
-    return testQuestions.filter((question, index) => {
+    return testQuestions.filter((question) => {
       const status = getQuestionStatus(question.id);
       if (filter === 'all') return true;
       return status === filter;

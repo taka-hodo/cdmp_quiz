@@ -22,13 +22,6 @@ interface TestDetail {
   unansweredQuestions: number[];
 }
 
-interface AnswerLog {
-  id: string;
-  question_id: number;
-  chosen_index: number;
-  is_correct: boolean;
-  answered_at: string;
-}
 
 const MyPage: React.FC = () => {
   const { user } = useAuthStore();
@@ -40,7 +33,6 @@ const MyPage: React.FC = () => {
   const [selectedTestResult, setSelectedTestResult] = useState<TestResult | null>(null);
   const [showTestDetail, setShowTestDetail] = useState(false);
   const [testDetail, setTestDetail] = useState<TestDetail | null>(null);
-  const [loadingDetail, setLoadingDetail] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -111,52 +103,6 @@ const MyPage: React.FC = () => {
     return questions.filter(q => incorrectQuestions.includes(q.id));
   };
 
-  const loadTestDetail = async (testResult: TestResult) => {
-    setLoadingDetail(true);
-    try {
-      // テスト結果のanswerLogsを取得
-      const { data: answerLogs, error } = await supabase
-        .from('answer_logs')
-        .select('*')
-        .eq('user_id', user?.id)
-        .gte('answered_at', new Date(testResult.completed_at).toISOString())
-        .order('answered_at', { ascending: true })
-        .limit(100);
-
-      if (error) {
-        console.error('Error fetching answer logs:', error);
-        return;
-      }
-
-      // 問題データを構築
-      const testQuestions = answerLogs?.map(log => 
-        questions.find(q => q.id === log.question_id)
-      ).filter(Boolean) || [];
-
-      const selectedAnswers = answerLogs?.map(log => log.chosen_index) || [];
-      const correctAnswers = answerLogs?.filter(log => log.is_correct).map(log => log.question_id) || [];
-      const incorrectAnswers = answerLogs?.filter(log => !log.is_correct).map(log => log.question_id) || [];
-      
-      // 未解答問題を特定
-      const answeredQuestionIds = answerLogs?.map(log => log.question_id) || [];
-      const allQuestionIds = Array.from({length: 100}, (_, i) => i + 1);
-      const unansweredQuestions = allQuestionIds.filter(id => !answeredQuestionIds.includes(id));
-
-      setTestDetail({
-        testQuestions,
-        selectedAnswers,
-        correctAnswers,
-        incorrectAnswers,
-        unansweredQuestions
-      });
-      setSelectedTestResult(testResult);
-      setShowTestDetail(true);
-    } catch (error) {
-      console.error('Error loading test detail:', error);
-    } finally {
-      setLoadingDetail(false);
-    }
-  };
 
   if (loading) {
     return (

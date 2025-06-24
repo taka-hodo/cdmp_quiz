@@ -3,7 +3,7 @@ import { useQuizStore } from '../store/quizStore';
 import type { FilterOption, DomainFilterOption } from '../types';
 
 const FilterDropdown: React.FC = () => {
-  const { filter, setFilter, domainFilter, setDomainFilter, questions, answerHistory } = useQuizStore();
+  const { filter, setFilter, domainFilter, setDomainFilter, questions } = useQuizStore();
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilter(e.target.value as FilterOption);

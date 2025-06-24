@@ -9,11 +9,10 @@ import Auth from './components/Auth';
 import { useQuizStore } from './store/quizStore';
 import { useAuthStore } from './store/authStore';
 import { loadQuestions } from './utils/questionLoader';
-import { shuffleQuestionsAndOptions } from './utils/shuffleUtils';
 import { supabase } from './lib/supabase';
 
 function App() {
-  const { setAllQuestions, language, practiceSet } = useQuizStore();
+  const { setAllQuestions, language } = useQuizStore();
   const { user, loading, setUser, setLoading } = useAuthStore();
 
   useEffect(() => {

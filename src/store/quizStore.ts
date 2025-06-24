@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Question, FilterOption, DomainFilterOption } from '../types';
-import { shuffleQuestionsAndOptions } from '../utils/shuffleUtils';
 
 interface PracticeProgress {
   questions: Question[];
@@ -190,7 +189,7 @@ export const useQuizStore = create<QuizStore>()(
       
       setIsTestActive: (active) => set({ isTestActive: active }),
       
-      setLanguage: (language) => set((state) => ({
+      setLanguage: (language) => set(() => ({
         language,
         // 言語切り替え時に問題関連の状態をリセット（但し問題番号は維持）
         questions: [],
@@ -205,23 +204,23 @@ export const useQuizStore = create<QuizStore>()(
     {
       name: 'quiz-storage',
       partialize: (state) => ({
-        bookmarks: Array.from(state.bookmarks),
+        bookmarks: Array.from(state.bookmarks) as number[],
         lastOpenQuestion: state.currentQuestionIndex,
         language: state.language,
         practiceSet: state.practiceSet,
         currentQuestionNumber: state.currentQuestionNumber,
         practiceProgress: state.practiceProgress ? {
           ...state.practiceProgress,
-          answerHistory: Array.from(state.practiceProgress.answerHistory.entries())
+          answerHistory: Array.from(state.practiceProgress.answerHistory.entries()) as [number, boolean][]
         } : null
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
           if (state.bookmarks) {
-            state.bookmarks = new Set(state.bookmarks as number[]);
+            state.bookmarks = new Set(state.bookmarks as unknown as number[]);
           }
           if (state.practiceProgress && state.practiceProgress.answerHistory) {
-            state.practiceProgress.answerHistory = new Map(state.practiceProgress.answerHistory as [number, boolean][]);
+            state.practiceProgress.answerHistory = new Map(state.practiceProgress.answerHistory as unknown as [number, boolean][]);
           }
         }
       }

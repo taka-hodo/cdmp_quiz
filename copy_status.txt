@@ -1,0 +1,25 @@
+CSV File Copy Status Report
+=============================
+
+Issue Identified:
+- The CSV files in public/data/ contain only headers
+- Source files in ../docs/ contain complete data (~799 questions each)
+- Need to copy complete files from source to destination
+
+Files to Copy:
+1. cdmp_questions_en.csv (English version)
+2. cdmp_questions_ja.csv (Japanese version)
+
+Source Directory: /Users/taka/Desktop/アプリ開発/CDMP/docs/
+Destination Directory: /Users/taka/Desktop/アプリ開発/CDMP/five-choice-quizzer/public/data/
+
+Action Required:
+Due to shell execution limitations, manual copy is recommended.
+Please run the commands provided in manual_copy_instructions.md
+
+Expected Results After Copy:
+- Each file should have ~800 lines (including header)
+- Each file should be several MB in size
+- Files should contain actual question data, not just headers
+
+Status: PENDING MANUAL EXECUTION

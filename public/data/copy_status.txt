@@ -1,0 +1,6 @@
+Files to copy:
+- Source EN: /Users/taka/Desktop/アプリ開発/CDMP/docs/cdmp_questions_en.csv
+- Source JA: /Users/taka/Desktop/アプリ开発/CDMP/docs/cdmp_questions_ja.csv
+- Target Directory: /Users/taka/Desktop/アプリ开发/CDMP/five-choice-quizzer/public/data/
+
+Manual copy process needed due to file size limitations in tools.
